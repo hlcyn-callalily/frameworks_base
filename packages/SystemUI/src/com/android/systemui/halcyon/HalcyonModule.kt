@@ -23,6 +23,7 @@ import com.android.systemui.qs.tileimpl.QSTileImpl
 import com.android.systemui.qs.tiles.AmbientDisplayTile
 import com.android.systemui.qs.tiles.AODTile
 import com.android.systemui.qs.tiles.AutoBrightnessTile
+import com.android.systemui.qs.tiles.BlurTile
 import com.android.systemui.qs.tiles.CaffeineTile
 import com.android.systemui.qs.tiles.DataSwitchTile
 import com.android.systemui.qs.tiles.HeadsUpTile
@@ -60,6 +61,12 @@ interface HalcyonModule {
     @IntoMap
     @StringKey(AutoBrightnessTile.TILE_SPEC)
     fun bindAutoBrightnessTile(autobrightnessTile: AutoBrightnessTile): QSTileImpl<*>
+
+    /** Inject BlurTile into tileMap in QSModule */
+    @Binds
+    @IntoMap
+    @StringKey(BlurTile.TILE_SPEC)
+    fun bindBlurTile(blurTile: BlurTile): QSTileImpl<*>
 
     /** Inject CaffeineTile into tileMap in QSModule */
     @Binds
@@ -113,6 +120,7 @@ interface HalcyonModule {
         const val AMBIENT_DISPLAY_TILE_SPEC = "ambient_display"
         const val AOD_TILE_SPEC = "aod"
         const val AUTO_BRIGHTNESS_TILE_SPEC = "auto_brightness"
+        const val BLUR_TILE_SPEC = "blur"
         const val CAFFEINE_TILE_SPEC = "caffeine"
         const val DATA_SWITCH_TILE_SPEC = "data_switch"
         const val HEADS_UP_TILE_SPEC = "heads_up"
@@ -162,6 +170,21 @@ interface HalcyonModule {
                     QSTileUIConfig.Resource(
                         iconRes = R.drawable.ic_qs_autobrightness,
                         labelRes = R.string.quick_settings_autobrightness_label
+                    ),
+                instanceId = uiEventLogger.getNewInstanceId(),
+                category = TileCategory.DISPLAY,
+            )
+
+        @Provides
+        @IntoMap
+        @StringKey(BLUR_TILE_SPEC)
+        fun provideBlurTileConfig(uiEventLogger: QsEventLogger): QSTileConfig =
+            QSTileConfig(
+                tileSpec = TileSpec.create(BLUR_TILE_SPEC),
+                uiConfig =
+                    QSTileUIConfig.Resource(
+                        iconRes = R.drawable.ic_qs_blur,
+                        labelRes = R.string.quick_settings_blur_label
                     ),
                 instanceId = uiEventLogger.getNewInstanceId(),
                 category = TileCategory.DISPLAY,
